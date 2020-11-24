@@ -9,9 +9,9 @@ class Game {
     for (let i = 0; i < this.factoryCount; i++) {
       this.factories[i] = [];
     }
-    this.satchel = [20, 20, 20, 20, 20];
+    this.satchel = [5, 5, 4, 1, 2];
     this.yard = [0, 0, 0, 0, 0];
-    this.lid = [0, 0, 0, 0, 0];
+    this.lid = [15, 15, 16, 19, 18];
     this.tiles = [];
     this.tiles.push(new Tile(1, 'green', 'images/green.png'));
     this.tiles.push(new Tile(2, 'blue', 'images/blue.png'));
@@ -24,7 +24,50 @@ class Game {
     }
   }
 
-  fill;
+  supplyFactories() {
+    if (
+      this.satchel.reduce((acc, val) => acc + val, 0) <
+      this.factoryCount * 4
+    ) {
+      for (let tileTypes = 0; tileTypes < this.factoryCount; tileTypes++) {
+        this.satchel[tileTypes] += this.lid[tileTypes];
+        this.lid[tileTypes] = 0;
+      }
+    }
+    for (let factory = 0; factory < this.factoryCount; factory++) {
+      for (let placeInFactory = 0; placeInFactory < 4; placeInFactory++) {
+        const randomPiece = Math.floor(
+          Math.random() * this.satchel.reduce((acc, val) => acc + val, 0)
+        );
+        switch (true) {
+          case randomPiece <= this.satchel[0]:
+            this.satchel[0]--;
+            this.factories[factory].push(this.tiles[0].id);
+            break;
+          case randomPiece <=
+            this.satchel.slice(0, 2).reduce((acc, val) => acc + val, 0):
+            this.satchel[1]--;
+            this.factories[factory].push(this.tiles[1].id);
+            break;
+          case randomPiece <=
+            this.satchel.slice(0, 3).reduce((acc, val) => acc + val, 0):
+            this.satchel[2]--;
+            this.factories[factory].push(this.tiles[2].id);
+            break;
+          case randomPiece <=
+            this.satchel.slice(0, 4).reduce((acc, val) => acc + val, 0):
+            this.satchel[3]--;
+            this.factories[factory].push(this.tiles[3].id);
+            break;
+          case randomPiece <=
+            this.satchel.slice(0, 5).reduce((acc, val) => acc + val, 0):
+            this.satchel[4]--;
+            this.factories[factory].push(this.tiles[4].id);
+            break;
+        }
+      }
+    }
+  }
 }
 
 class Tile {
