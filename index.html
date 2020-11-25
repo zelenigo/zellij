@@ -14,7 +14,54 @@
   </head>
   <body>
     <h1>Zellij</h1>
-
+    <ul class="number-of-players">
+      <li><button>2 Players</button></li>
+      <li><button>3 Players</button></li>
+      <li><button>4 Players</button></li>
+    </ul>
+    <section class="player-names">
+      <div class="player-name">
+        <label for="nameone">Player 1:</label>
+        <input
+          class="player-name-input"
+          type="text"
+          id="nameone"
+          name="player_name"
+          placeholder="Player 1"
+        />
+      </div>
+      <div class="player-name">
+        <label for="nametwo">Player 2:</label>
+        <input
+          class="player-name-input"
+          type="text"
+          id="nametwo"
+          name="player_name"
+          placeholder="Player 2"
+        />
+      </div>
+      <div class="player-name">
+        <label for="namethree">Player 3:</label>
+        <input
+          class="player-name-input"
+          type="text"
+          id="namethree"
+          name="player_name"
+          placeholder="Player 3"
+        />
+      </div>
+      <div class="player-name">
+        <label for="namefour">Player 4:</label>
+        <input
+          class="player-name-input"
+          type="text"
+          id="namefour"
+          name="player_name"
+          placeholder="Player 4"
+        />
+      </div>
+    </section>
+    <canvas class="game-surface" width="800" height="600"></canvas>
     <script type="text/javascript" src="js/index.js"></script>
   </body>
 </html>

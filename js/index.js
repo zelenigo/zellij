@@ -4,14 +4,16 @@ class Game {
   constructor(playerCount) {
     //optimized for 2, 3 & 4
     this.playerCount = playerCount;
+    this.firstPlayer = 0;
+    this.currentPlayer = this.firstPlayer;
     this.factoryCount = playerCount * 2 + 1;
     this.factories = [];
     for (let i = 0; i < this.factoryCount; i++) {
       this.factories[i] = [];
     }
-    this.satchel = [5, 5, 4, 1, 2];
+    this.satchel = [20, 20, 20, 20, 20];
     this.yard = [0, 0, 0, 0, 0];
-    this.lid = [15, 15, 16, 19, 18];
+    this.lid = [0, 0, 0, 0, 0];
     this.tiles = [];
     this.tiles.push(new Tile(1, 'green', 'images/green.png'));
     this.tiles.push(new Tile(2, 'blue', 'images/blue.png'));
@@ -22,6 +24,7 @@ class Game {
     for (let i = 0; i < playerCount; i++) {
       this.players.push(new Player('Player' + 1));
     }
+    this.round = 0;
   }
 
   supplyFactories() {

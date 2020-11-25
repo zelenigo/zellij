@@ -1,3 +1,54 @@
 body {
   font-family: 'Roboto Slab', serif;
+  color: gainsboro;
+  background-color: darkslategray;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.number-of-players {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 804px;
+}
+
+.number-of-players button {
+  padding: 0.5em 5.65em;
+  font-family: 'Roboto Slab', serif;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.player-names {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 804px;
+  margin-bottom: 1.5em;
+}
+
+.player-name {
+  padding: 0.5em 0;
+}
+
+.player-name label {
+  display: none;
+}
+
+.player-name-input {
+  padding: 0.25em 0.1em;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 385px;
+}
+
+.game-surface {
+  border: 2px solid gainsboro;
+  display: block;
 }
