@@ -8,8 +8,12 @@ class Game {
     this.currentPlayer = this.firstPlayer;
     this.factoryCount = playerCount * 2 + 1;
     this.factories = [];
+    this.factoriesTileCoordinates = [];
+    this.factoryTileSelected = [];
     for (let i = 0; i < this.factoryCount; i++) {
       this.factories[i] = [];
+      this.factoriesTileCoordinates[i] = [];
+      this.factoryTileSelected[i] = [false, false, false, false];
     }
     this.satchel = [20, 20, 20, 20, 20];
     this.yard = [0, 0, 0, 0, 0];
@@ -22,9 +26,112 @@ class Game {
     this.tiles.push(new Tile(5, 'brown', 'images/brown.png'));
     this.players = [];
     for (let i = 0; i < playerCount; i++) {
-      this.players.push(new Player('Player' + 1));
+      this.players.push(
+        new Player(playerNames[i].value || 'Player ' + (i + 1))
+      );
     }
     this.round = 0;
+  }
+
+  setFactoryTileCoordinates() {
+    const startFactoriesX = canvasWidth / 2 - 24 * 2 - 75 * 5;
+    const startFactoriesY = 0;
+    const tileHeight = 50;
+    const tileWidth = 50;
+    for (let factory = 0; factory < this.factoryCount; factory++) {
+      const currentFactoryX = startFactoriesX + (150 + 24) * factory;
+      const currentFactoryY = startFactoriesY;
+      this.factoriesTileCoordinates[factory].push({
+        x: currentFactoryX + 75 - 54,
+        y: currentFactoryY + 75 - 54,
+        dx: currentFactoryX + 75 - 54 + tileWidth,
+        dy: currentFactoryY + 75 - 54 + tileHeight
+      });
+      this.factoriesTileCoordinates[factory].push({
+        x: currentFactoryX + 75 + 4,
+        y: currentFactoryY + 75 - 54,
+        dx: currentFactoryX + 75 + 4 + tileWidth,
+        dy: currentFactoryY + 75 - 54 + tileHeight
+      });
+      this.factoriesTileCoordinates[factory].push({
+        x: currentFactoryX + 75 - 54,
+        y: currentFactoryY + 75 + 4,
+        dx: currentFactoryX + 75 - 54 + tileWidth,
+        dy: currentFactoryY + 75 + 4 + tileHeight
+      });
+      this.factoriesTileCoordinates[factory].push({
+        x: currentFactoryX + 75 + 4,
+        y: currentFactoryY + 75 + 4,
+        dx: currentFactoryX + 75 + 4 + tileWidth,
+        dy: currentFactoryY + 75 + 4 + tileHeight
+      });
+    }
+  }
+
+  drawFactories() {
+    for (let factory = 0; factory < this.factoryCount; factory++) {
+      const startFactories = canvasWidth / 2 - 24 * 2 - 75 * 5;
+      const currentFactoryX = startFactories + (150 + 24) * factory;
+      const currentFactoryY = 0;
+      ctx.drawImage(factoryImage, currentFactoryX, currentFactoryY, 150, 150);
+      if (this.factories[factory].length > 0) {
+        for (let i = 0; i < 4; i++) {
+          if (this.factoryTileSelected[factory][i]) {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(
+              this.factoriesTileCoordinates[factory][i].x - 2,
+              this.factoriesTileCoordinates[factory][i].y - 2,
+              54,
+              54
+            );
+          }
+        }
+        ctx.drawImage(
+          tileImage,
+          this.factories[factory][0] * 50,
+          0,
+          50,
+          50,
+          this.factoriesTileCoordinates[factory][0].x,
+          this.factoriesTileCoordinates[factory][0].y,
+          50,
+          50
+        );
+        ctx.drawImage(
+          tileImage,
+          this.factories[factory][1] * 50,
+          0,
+          50,
+          50,
+          this.factoriesTileCoordinates[factory][1].x,
+          this.factoriesTileCoordinates[factory][1].y,
+          50,
+          50
+        );
+        ctx.drawImage(
+          tileImage,
+          this.factories[factory][2] * 50,
+          0,
+          50,
+          50,
+          this.factoriesTileCoordinates[factory][2].x,
+          this.factoriesTileCoordinates[factory][2].y,
+          50,
+          50
+        );
+        ctx.drawImage(
+          tileImage,
+          this.factories[factory][3] * 50,
+          0,
+          50,
+          50,
+          this.factoriesTileCoordinates[factory][3].x,
+          this.factoriesTileCoordinates[factory][3].y,
+          50,
+          50
+        );
+      }
+    }
   }
 
   supplyFactories() {
@@ -71,72 +178,41 @@ class Game {
       }
     }
   }
-}
 
-class Tile {
-  constructor(id, color, image) {
-    this.id = id;
-    this.color = color;
-    this.count = 20;
-    this.pattern = image;
+  pickTile() {
+    window.addEventListener('click', (event) => {
+      for (let i = 0; i < this.factoryCount; i++) {
+        this.factoryTileSelected[i] = [false, false, false, false];
+      }
+      for (let factory = 0; factory < this.factoryCount; factory++) {
+        for (let i = 0; i < 4; i++) {
+          if (
+            event.layerX > this.factoriesTileCoordinates[factory][i].x &&
+            event.layerX < this.factoriesTileCoordinates[factory][i].dx &&
+            event.layerY > this.factoriesTileCoordinates[factory][i].y &&
+            event.layerY < this.factoriesTileCoordinates[factory][i].dy
+          ) {
+            this.factoryTileSelected[factory][i] = true;
+            if (this.factoryTileSelected[factory][i]) {
+              let highlightedTile = this.factories[factory][i];
+              for (let j = 0; j < 4; j++) {
+                if (this.factories[factory][i] === this.factories[factory][j]) {
+                  this.factoryTileSelected[factory][j] = true;
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  loop() {
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    this.drawFactories();
+
+    window.requestAnimationFrame(() => {
+      this.loop();
+    });
   }
 }
-
-class Track {
-  constructor(size) {
-    this.maxSlots = size;
-    this.usedSlots = 0;
-    this.tileID = 0;
-  }
-}
-
-class Player {
-  constructor(name) {
-    this.name = name;
-    this.score = 0;
-    this.storage = [];
-    for (let i = 0; i < 5; i++) {
-      this.storage.push(new Track(i + 1));
-    }
-    this.penaltyLine = [];
-    this.wall = [
-      [
-        [0, 1],
-        [0, 2],
-        [0, 3],
-        [0, 4],
-        [0, 5]
-      ],
-      [
-        [0, 5],
-        [0, 1],
-        [0, 2],
-        [0, 3],
-        [0, 4]
-      ],
-      [
-        [0, 4],
-        [0, 5],
-        [0, 1],
-        [0, 2],
-        [0, 3]
-      ],
-      [
-        [0, 3],
-        [0, 4],
-        [0, 5],
-        [0, 1],
-        [0, 2]
-      ],
-      [
-        [0, 2],
-        [0, 3],
-        [0, 4],
-        [0, 5],
-        [0, 1]
-      ]
-    ];
-  }
-}
-
-const game = new Game(2);
