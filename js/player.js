@@ -6,6 +6,16 @@ class Track {
   }
 }
 
+const playerBoardImage = new Image();
+playerBoardImage.src = 'images/player-board.png';
+
+const playerDrawCoord = [
+  { x: canvasWidth / 2 - playerBoardImage.width - 64, y: 334 },
+  { x: canvasWidth / 2 + 64, y: 334 },
+  { x: canvasWidth / 2 - playerBoardImage.width - 64, y: 720 },
+  { x: canvasWidth / 2 + 64, y: 720 }
+];
+
 class Player {
   constructor(name) {
     this.name = name;
@@ -52,5 +62,9 @@ class Player {
         [0, 1]
       ]
     ];
+  }
+
+  draw() {
+    ctx.drawImage(playerBoardImage, 0, 0);
   }
 }

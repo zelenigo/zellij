@@ -5,10 +5,8 @@ const factoryImage = new Image();
 factoryImage.src = 'images/factory.png';
 
 class Tile {
-  constructor(id, color, image) {
+  constructor(id) {
     this.id = id;
-    this.color = color;
     this.count = 20;
-    this.pattern = image;
   }
 }
