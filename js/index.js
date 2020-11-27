@@ -19,11 +19,11 @@ class Game {
     this.yard = [0, 0, 0, 0, 0];
     this.lid = [0, 0, 0, 0, 0];
     this.tiles = [];
-    this.tiles.push(new Tile(1, 'green', 'images/green.png'));
-    this.tiles.push(new Tile(2, 'blue', 'images/blue.png'));
-    this.tiles.push(new Tile(3, 'yellow', 'images/yellow.png'));
-    this.tiles.push(new Tile(4, 'orange', 'images/orange.png'));
-    this.tiles.push(new Tile(5, 'brown', 'images/brown.png'));
+    this.tiles.push(new Tile(1));
+    this.tiles.push(new Tile(2));
+    this.tiles.push(new Tile(3));
+    this.tiles.push(new Tile(4));
+    this.tiles.push(new Tile(5));
     this.players = [];
     for (let i = 0; i < playerCount; i++) {
       this.players.push(
@@ -181,8 +181,10 @@ class Game {
 
   pickTile() {
     window.addEventListener('click', (event) => {
-      for (let i = 0; i < this.factoryCount; i++) {
-        this.factoryTileSelected[i] = [false, false, false, false];
+      if (event.layerY < 334) {
+        for (let i = 0; i < this.factoryCount; i++) {
+          this.factoryTileSelected[i] = [false, false, false, false];
+        }
       }
       for (let factory = 0; factory < this.factoryCount; factory++) {
         for (let i = 0; i < 4; i++) {
@@ -210,6 +212,15 @@ class Game {
   loop() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     this.drawFactories();
+    for (let noOfPlayers = 0; noOfPlayers < this.playerCount; noOfPlayers++) {
+      ctx.save();
+      ctx.translate(
+        playerDrawCoord[noOfPlayers].x,
+        playerDrawCoord[noOfPlayers].y
+      );
+      this.players[noOfPlayers].draw();
+      ctx.restore();
+    }
 
     window.requestAnimationFrame(() => {
       this.loop();

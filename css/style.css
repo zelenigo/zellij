@@ -49,6 +49,5 @@ body {
 }
 
 .game-surface {
-  border: 2px solid gainsboro;
   display: block;
 }
