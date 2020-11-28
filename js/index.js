@@ -219,6 +219,9 @@ class Game {
         playerDrawCoord[noOfPlayers].y
       );
       this.players[noOfPlayers].draw();
+      if (noOfPlayers === this.currentPlayer) {
+        ctx.fillRect(playerBoardImage.width - 50, 0, 50, 50);
+      }
       ctx.restore();
     }
 
