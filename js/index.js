@@ -16,6 +16,7 @@ class Game {
       this.factoryTileSelected[i] = [false, false, false, false];
     }
     this.satchel = [20, 20, 20, 20, 20];
+    this.discardYard = [];
     this.yard = [0, 0, 0, 0, 0];
     this.lid = [0, 0, 0, 0, 0];
     this.tiles = [];
@@ -24,6 +25,7 @@ class Game {
     this.tiles.push(new Tile(3));
     this.tiles.push(new Tile(4));
     this.tiles.push(new Tile(5));
+    this.selectedTile = {};
     this.players = [];
     for (let i = 0; i < playerCount; i++) {
       this.players.push(
@@ -184,6 +186,9 @@ class Game {
       if (event.layerY < 334) {
         for (let i = 0; i < this.factoryCount; i++) {
           this.factoryTileSelected[i] = [false, false, false, false];
+          this.selectedTile.color = 0;
+          this.selectedTile.factory = undefined;
+          this.selectedTile.amount = 0;
         }
       }
       for (let factory = 0; factory < this.factoryCount; factory++) {
@@ -195,11 +200,14 @@ class Game {
             event.layerY < this.factoriesTileCoordinates[factory][i].dy
           ) {
             this.factoryTileSelected[factory][i] = true;
+            this.selectedTile.factory = factory;
+            this.selectedTile.color = this.factories[factory][i];
+            this.selectedTile.amount = 0;
             if (this.factoryTileSelected[factory][i]) {
-              let highlightedTile = this.factories[factory][i];
               for (let j = 0; j < 4; j++) {
                 if (this.factories[factory][i] === this.factories[factory][j]) {
                   this.factoryTileSelected[factory][j] = true;
+                  this.selectedTile.amount++;
                 }
               }
             }
@@ -207,6 +215,75 @@ class Game {
         }
       }
     });
+  }
+
+  pickTrack(active) {
+    window.addEventListener('click', (event) => {
+      for (let track = 0; track < 5; track++) {
+        if (
+          event.layerX > playerDrawCoord[active].x + 290 &&
+          event.layerX <
+            playerDrawCoord[active].x + 290 + (track + 1) * (50 + 8) &&
+          event.layerY > playerDrawCoord[active].y + track * (50 + 8) &&
+          event.layerY < playerDrawCoord[active].y + (track + 1) * (50 + 8) &&
+          this.selectedTile.color !== 0 &&
+          this.players[active].storage[track].available === true
+        ) {
+          console.log(track);
+          for (let i = 0; i < 5; i++) {
+            this.players[active].storage[i].available = false;
+          }
+          let availableSlots =
+            this.players[active].storage[track].maxSlots -
+            this.players[active].storage[track].usedSlots;
+          if (this.selectedTile.amount <= availableSlots) {
+            this.players[active].storage[
+              track
+            ].usedSlots = this.selectedTile.amount;
+          } else {
+            this.selectedTile.amount -= availableSlots;
+            this.players[active].storage[track].usedSlots = this.players[
+              active
+            ].storage[track].maxSlots;
+            for (
+              let extraTiles = 0;
+              extraTiles < this.selectedTile.amount;
+              extraTiles++
+            ) {
+              this.players[active].penaltyLine.push(this.selectedTile.color);
+            }
+          }
+          this.players[active].storage[track].tileID = this.selectedTile.color;
+
+          for (let tile = 0; tile < 4; tile++) {
+            if (
+              this.factoryTileSelected[this.selectedTile.factory][tile] ===
+              false
+            ) {
+              this.discardYard.push(
+                this.factories[this.selectedTile.factory][tile]
+              );
+            }
+          }
+          this.factories[this.selectedTile.factory] = [];
+
+          this.selectedTile.color = 0;
+          this.selectedTile.amount = 0;
+          this.factoryTileSelected[this.selectedTile.factory] = [
+            false,
+            false,
+            false,
+            false
+          ];
+        }
+      }
+    });
+  }
+
+  playRound() {
+    this.supplyFactories();
+    this.pickTile();
+    this.pickTrack(this.currentPlayer);
   }
 
   loop() {
@@ -218,12 +295,17 @@ class Game {
         playerDrawCoord[noOfPlayers].x,
         playerDrawCoord[noOfPlayers].y
       );
-      this.players[noOfPlayers].draw();
       if (noOfPlayers === this.currentPlayer) {
         ctx.fillRect(playerBoardImage.width - 50, 0, 50, 50);
+        this.players[this.currentPlayer].drawAvailableTrack(
+          this.selectedTile.color
+        );
       }
+      this.players[noOfPlayers].draw();
       ctx.restore();
     }
+
+    this.playRound();
 
     window.requestAnimationFrame(() => {
       this.loop();
