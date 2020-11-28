@@ -16,7 +16,7 @@ class Game {
       this.factoryTileSelected[i] = [false, false, false, false];
     }
     this.satchel = [20, 20, 20, 20, 20];
-    this.discardYard = [];
+    this.discardYard = [0];
     this.yard = [0, 0, 0, 0, 0];
     this.lid = [0, 0, 0, 0, 0];
     this.tiles = [];
@@ -32,7 +32,7 @@ class Game {
         new Player(playerNames[i].value || 'Player ' + (i + 1))
       );
     }
-    this.round = 0;
+    this.roundProgress = 0;
   }
 
   setFactoryTileCoordinates() {
@@ -67,6 +67,25 @@ class Game {
         dx: currentFactoryX + 75 + 4 + tileWidth,
         dy: currentFactoryY + 75 + 4 + tileHeight
       });
+    }
+  }
+
+  drawYard() {
+    const startingX =
+      canvasWidth / 2 - ((50 + 8) * this.discardYard.length) / 2;
+    const startingY = 150 + 24;
+    for (let tile = 0; tile < this.discardYard.length; tile++) {
+      ctx.drawImage(
+        tileImage,
+        this.discardYard[tile] * 50,
+        0,
+        50,
+        50,
+        startingX + tile * (50 + 8),
+        startingY,
+        50,
+        50
+      );
     }
   }
 
@@ -239,7 +258,7 @@ class Game {
           if (this.selectedTile.amount <= availableSlots) {
             this.players[active].storage[
               track
-            ].usedSlots = this.selectedTile.amount;
+            ].usedSlots += this.selectedTile.amount;
           } else {
             this.selectedTile.amount -= availableSlots;
             this.players[active].storage[track].usedSlots = this.players[
@@ -280,15 +299,124 @@ class Game {
     });
   }
 
+  tilesNotInPlay() {
+    let tiles = 0;
+    for (let factory = 0; factory < this.factoryCount; factory++) {
+      tiles += this.factories[factory].reduce((a, b) => a + b, 0);
+    }
+    if (tiles > 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  scoring() {
+    for (let player = 0; player < this.playerCount; player++) {
+      for (let track = 0; track < 5; track++) {
+        if (
+          this.players[player].storage[track].maxSlots ===
+          this.players[player].storage[track].usedSlots
+        ) {
+          if (this.players[player].storage[track].maxSlots !== 1) {
+            this.lid[this.players[player].storage[track].tileID - 1] +=
+              this.players[player].storage[track].maxSlots - 1;
+          }
+
+          let wallIndex = this.players[player].wallIDs[track].indexOf(
+            this.players[player].storage[track].tileID
+          );
+          this.players[player].wallFill[track][wallIndex] = 1;
+
+          let roundScoreRow = 0;
+          let scoreStartCol = wallIndex;
+          do {
+            roundScoreRow += 1;
+            scoreStartCol++;
+          } while (
+            this.players[player].wallFill[track][scoreStartCol] !== 0 &&
+            scoreStartCol < 5
+          );
+          scoreStartCol = wallIndex - 1;
+          while (
+            this.players[player].wallFill[track][scoreStartCol] !== 0 &&
+            scoreStartCol >= 0
+          ) {
+            roundScoreRow += 1;
+            scoreStartCol--;
+          }
+          if (roundScoreRow === 5) {
+            roundScoreRow += 2;
+          }
+
+          let roundScoreCol = 0;
+          let scoreStartRow = track;
+          if (scoreStartRow <= 4) {
+            while (
+              this.players[player].wallFill[scoreStartRow][wallIndex] !== 0 &&
+              scoreStartRow <= 4
+            ) {
+              roundScoreCol += 1;
+              scoreStartRow++;
+            }
+          }
+          scoreStartRow = track - 1;
+          if (scoreStartRow >= 0) {
+            while (
+              this.players[player].wallFill[scoreStartRow][wallIndex] !== 0 &&
+              scoreStartRow >= 0
+            ) {
+              roundScoreCol += 1;
+              scoreStartRow--;
+            }
+          }
+          if (roundScoreCol === 5) {
+            roundScoreRow += 7;
+          }
+          roundScoreCol--;
+
+          let colorID = this.players[player].storage[track].tileID;
+          let roundScoreAll = 0;
+          for (let i = 0; i < 5; i++) {
+            roundScoreAll += this.players[player].wallFill[i][
+              this.players[player].wallIDs[i].indexOf(colorID)
+            ];
+          }
+          if (roundScoreAll === 5) {
+            roundScoreAll = 12;
+          } else {
+            roundScoreAll = 0;
+          }
+
+          this.players[player].score +=
+            roundScoreRow + roundScoreCol + roundScoreAll;
+          this.players[player].storage[track].usedSlots = 0;
+          this.players[player].storage[track].tileID = 0;
+        }
+      }
+    }
+  }
+
   playRound() {
-    this.supplyFactories();
-    this.pickTile();
-    this.pickTrack(this.currentPlayer);
+    if (this.roundProgress === 0) {
+      this.supplyFactories();
+      this.roundProgress++;
+    }
+    if (this.roundProgress === 1) {
+      this.pickTile();
+      this.pickTrack(this.currentPlayer);
+      this.roundProgress++;
+    }
+    if (this.roundProgress === 2 && this.tilesNotInPlay()) {
+      this.scoring();
+      this.roundProgress++;
+    }
   }
 
   loop() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     this.drawFactories();
+    this.drawYard();
     for (let noOfPlayers = 0; noOfPlayers < this.playerCount; noOfPlayers++) {
       ctx.save();
       ctx.translate(

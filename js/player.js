@@ -78,10 +78,34 @@ class Player {
     }
   }
 
+  drawWall() {
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 5; col++) {
+        if (this.wallFill[row][col] === 1) {
+          ctx.drawImage(
+            tileImage,
+            this.wallIDs[row][col] * 50,
+            0,
+            50,
+            50,
+            4 + col * (50 + 8),
+            4 + row * (50 + 8),
+            50,
+            50
+          );
+        }
+      }
+    }
+  }
+
   draw() {
+    ctx.font = '1.5rem "Carter One"';
+    ctx.fillStyle = 'gainsboro';
+    ctx.fillText(`${this.name}: ${this.score} points`, 4, -24);
     ctx.drawImage(playerBoardImage, 0, 0);
     this.drawPenaltyLine();
     this.drawWorkers();
+    this.drawWall();
   }
 
   drawAvailableTrack(color) {
