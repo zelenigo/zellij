@@ -17,7 +17,6 @@ class Game {
     }
     this.satchel = [20, 20, 20, 20, 20];
     this.discardYard = [0];
-    this.yard = [0, 0, 0, 0, 0];
     this.lid = [0, 0, 0, 0, 0];
     this.tiles = [];
     this.tiles.push(new Tile(1));
@@ -368,20 +367,13 @@ class Game {
               }
             }
           }
-          //if (scoreStartRow >= 0) {
-          //  while (
-          //    this.players[player].wallFill[scoreStartRow][wallIndex] === 1 &&
-          //    scoreStartRow >= 0
-          //  ) {
-          //    roundScoreCol += 1;
-          //    scoreStartRow--;
-          //  }
-          //}
+          //Adding Column Bonus
           if (roundScoreCol === 5) {
             roundScoreRow += 7;
           }
           roundScoreCol--;
 
+          //Adding Bonus for filling all tiles of the same color
           let colorID = this.players[player].storage[track].tileID;
           let roundScoreAll = 0;
           for (let i = 0; i < 5; i++) {
@@ -394,11 +386,31 @@ class Game {
           } else {
             roundScoreAll = 0;
           }
-          console.log(roundScoreRow, roundScoreCol, roundScoreAll);
           this.players[player].score +=
             roundScoreRow + roundScoreCol + roundScoreAll;
           this.players[player].storage[track].usedSlots = 0;
           this.players[player].storage[track].tileID = 0;
+
+          //Calculating penalties
+          if (this.players[player].penaltyLine.length > 0) {
+            let penaltyTiles = this.players[player].penaltyLine.length;
+            let totalPenalty = 0;
+            for (let tile = 0; tile < penaltyTiles; tile++) {
+              totalPenalty += this.players[player].penaltyValues[tile];
+              let penaltyLineTileColor = this.players[player].penaltyLine[tile];
+              if (penaltyLineTileColor === 0) {
+                this.discardYard = [0];
+              } else {
+                this.lid[penaltyLineTileColor - 1]++;
+              }
+            }
+            this.players[player].penaltyLine = [];
+            if (totalPenalty > this.players[player].score) {
+              this.players[player].score = 0;
+            } else {
+              this.players[player].score -= totalPenalty;
+            }
+          }
         }
       }
     }
