@@ -28,6 +28,7 @@ class Player {
       this.storage.push(new Track(i + 1));
     }
     this.penaltyLine = [];
+    this.penaltyValues = [1, 1, 2, 2, 2, 3, 3, 3, 3];
     this.wallIDs = [
       [1, 2, 3, 4, 5],
       [5, 1, 2, 3, 4],
