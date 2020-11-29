@@ -334,12 +334,12 @@ class Game {
             roundScoreRow += 1;
             scoreStartCol++;
           } while (
-            this.players[player].wallFill[track][scoreStartCol] !== 0 &&
+            this.players[player].wallFill[track][scoreStartCol] === 1 &&
             scoreStartCol < 5
           );
           scoreStartCol = wallIndex - 1;
           while (
-            this.players[player].wallFill[track][scoreStartCol] !== 0 &&
+            this.players[player].wallFill[track][scoreStartCol] === 1 &&
             scoreStartCol >= 0
           ) {
             roundScoreRow += 1;
@@ -351,25 +351,32 @@ class Game {
 
           let roundScoreCol = 0;
           let scoreStartRow = track;
-          if (scoreStartRow <= 4) {
-            while (
-              this.players[player].wallFill[scoreStartRow][wallIndex] !== 0 &&
-              scoreStartRow <= 4
-            ) {
-              roundScoreCol += 1;
-              scoreStartRow++;
+          for (let i = scoreStartRow; i < 5; i++) {
+            if (this.players[player].wallFill[i][wallIndex] === 1) {
+              roundScoreCol++;
+            } else {
+              i = 5;
             }
           }
-          scoreStartRow = track - 1;
-          if (scoreStartRow >= 0) {
-            while (
-              this.players[player].wallFill[scoreStartRow][wallIndex] !== 0 &&
-              scoreStartRow >= 0
-            ) {
-              roundScoreCol += 1;
-              scoreStartRow--;
+          if (track > 0) {
+            scoreStartRow = track - 1;
+            for (let i = scoreStartRow; i > -1; i--) {
+              if (this.players[player].wallFill[i][wallIndex] === 1) {
+                roundScoreCol++;
+              } else {
+                i = -1;
+              }
             }
           }
+          //if (scoreStartRow >= 0) {
+          //  while (
+          //    this.players[player].wallFill[scoreStartRow][wallIndex] === 1 &&
+          //    scoreStartRow >= 0
+          //  ) {
+          //    roundScoreCol += 1;
+          //    scoreStartRow--;
+          //  }
+          //}
           if (roundScoreCol === 5) {
             roundScoreRow += 7;
           }
@@ -387,7 +394,7 @@ class Game {
           } else {
             roundScoreAll = 0;
           }
-
+          console.log(roundScoreRow, roundScoreCol, roundScoreAll);
           this.players[player].score +=
             roundScoreRow + roundScoreCol + roundScoreAll;
           this.players[player].storage[track].usedSlots = 0;
