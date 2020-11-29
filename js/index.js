@@ -32,6 +32,8 @@ class Game {
       );
     }
     this.roundProgress = 0;
+    this.clickX = 0;
+    this.clickY = 0;
   }
 
   setFactoryTileCoordinates() {
@@ -293,9 +295,19 @@ class Game {
             false,
             false
           ];
+          this.switchPlayer();
         }
       }
     });
+  }
+
+  switchPlayer() {
+    if (this.currentPlayer === this.playerCount - 1) {
+      this.currentPlayer = 0;
+    } else {
+      this.currentPlayer++;
+    }
+    this.pickTrack(this.currentPlayer);
   }
 
   tilesNotInPlay() {
@@ -390,27 +402,32 @@ class Game {
             roundScoreRow + roundScoreCol + roundScoreAll;
           this.players[player].storage[track].usedSlots = 0;
           this.players[player].storage[track].tileID = 0;
-
-          //Calculating penalties
-          if (this.players[player].penaltyLine.length > 0) {
-            let penaltyTiles = this.players[player].penaltyLine.length;
-            let totalPenalty = 0;
-            for (let tile = 0; tile < penaltyTiles; tile++) {
-              totalPenalty += this.players[player].penaltyValues[tile];
-              let penaltyLineTileColor = this.players[player].penaltyLine[tile];
-              if (penaltyLineTileColor === 0) {
-                this.discardYard = [0];
-              } else {
-                this.lid[penaltyLineTileColor - 1]++;
-              }
-            }
-            this.players[player].penaltyLine = [];
-            if (totalPenalty > this.players[player].score) {
-              this.players[player].score = 0;
-            } else {
-              this.players[player].score -= totalPenalty;
-            }
+          console.log(
+            this.players[player].name,
+            roundScoreRow,
+            roundScoreCol,
+            roundScoreAll
+          );
+        }
+      } //Calculating penalties
+      if (this.players[player].penaltyLine.length > 0) {
+        let penaltyTiles = this.players[player].penaltyLine.length;
+        let totalPenalty = 0;
+        for (let tile = 0; tile < penaltyTiles; tile++) {
+          totalPenalty += this.players[player].penaltyValues[tile];
+          let penaltyLineTileColor = this.players[player].penaltyLine[tile];
+          if (penaltyLineTileColor === 0) {
+            this.discardYard = [0];
+          } else {
+            this.lid[penaltyLineTileColor - 1]++;
           }
+        }
+        this.players[player].penaltyLine = [];
+        console.log(this.players[player].name, totalPenalty);
+        if (totalPenalty > this.players[player].score) {
+          this.players[player].score = 0;
+        } else {
+          this.players[player].score -= totalPenalty;
         }
       }
     }
@@ -428,7 +445,7 @@ class Game {
     }
     if (this.roundProgress === 2 && this.tilesNotInPlay()) {
       this.scoring();
-      this.roundProgress++;
+      this.roundProgress = 0;
     }
   }
 
