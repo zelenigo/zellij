@@ -292,6 +292,10 @@ class Game {
         this.selectedTile.color !== 0
       ) {
         console.log('Penalty line has been clicked.');
+        if (this.selectedTile.firstMarker === true) {
+          this.players[active].penaltyLine.push(0);
+          this.selectedTile.firstMarker = false;
+        }
         for (let tile = 0; tile < this.selectedTile.amount; tile++) {
           this.players[active].penaltyLine.push(this.selectedTile.color);
         }
@@ -311,6 +315,10 @@ class Game {
             console.log(`Track #${track} has been clicked.`);
             for (let i = 0; i < 5; i++) {
               this.players[active].storage[i].available = false;
+            }
+            if (this.selectedTile.firstMarker === true) {
+              this.players[active].penaltyLine.push(0);
+              this.selectedTile.firstMarker = false;
             }
             let availableSlots =
               this.players[active].storage[track].maxSlots -
@@ -493,6 +501,7 @@ class Game {
           let penaltyLineTileColor = this.players[player].penaltyLine[tile];
           if (penaltyLineTileColor === 0) {
             this.discardYard = [0];
+            this.firstPlayer === player;
           } else {
             this.lid[penaltyLineTileColor - 1]++;
           }
@@ -511,6 +520,7 @@ class Game {
   playRound() {
     if (this.roundProgress === 0) {
       this.supplyFactories();
+      this.currentPlayer = this.firstPlayer;
       this.roundProgress++;
     }
     if (this.roundProgress === 1) {
