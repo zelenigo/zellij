@@ -117,6 +117,10 @@ class Player {
         ctx.fillRect(290, i * (50 + 8), (i + 1) * (50 + 8), 50 + 8);
       }
     }
+    if (color > 0) {
+      ctx.fillStyle = 'orange';
+      ctx.fillRect(0, 298, 406, 58);
+    }
   }
 
   checkAvailableTrack(color) {
