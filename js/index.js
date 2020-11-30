@@ -239,68 +239,82 @@ class Game {
 
   pickTrack(active) {
     window.addEventListener('click', (event) => {
-      for (let track = 0; track < 5; track++) {
-        if (
-          event.layerX > playerDrawCoord[active].x + 290 &&
-          event.layerX <
-            playerDrawCoord[active].x + 290 + (track + 1) * (50 + 8) &&
-          event.layerY > playerDrawCoord[active].y + track * (50 + 8) &&
-          event.layerY < playerDrawCoord[active].y + (track + 1) * (50 + 8) &&
-          this.selectedTile.color !== 0 &&
-          this.players[active].storage[track].available === true
-        ) {
-          console.log(track);
-          for (let i = 0; i < 5; i++) {
-            this.players[active].storage[i].available = false;
-          }
-          let availableSlots =
-            this.players[active].storage[track].maxSlots -
-            this.players[active].storage[track].usedSlots;
-          if (this.selectedTile.amount <= availableSlots) {
+      if (
+        event.layerX > playerDrawCoord[active].x &&
+        event.layerX < playerDrawCoord[active].x + 406 &&
+        event.layerY > playerDrawCoord[active].y + 298 &&
+        event.layerY < playerDrawCoord[active].y + 298 + 58 &&
+        this.selectedTile.color !== 0
+      ) {
+        console.log('Penalty line has been clicked.');
+        for (let tile = 0; tile < this.selectedTile.amount; tile++) {
+          this.players[active].penaltyLine.push(this.selectedTile.color);
+        }
+        this.emptyFactory();
+        this.switchPlayer();
+      } else {
+        for (let track = 0; track < 5; track++) {
+          if (
+            event.layerX > playerDrawCoord[active].x + 290 &&
+            event.layerX <
+              playerDrawCoord[active].x + 290 + (track + 1) * (50 + 8) &&
+            event.layerY > playerDrawCoord[active].y + track * (50 + 8) &&
+            event.layerY < playerDrawCoord[active].y + (track + 1) * (50 + 8) &&
+            this.selectedTile.color !== 0 &&
+            this.players[active].storage[track].available === true
+          ) {
+            console.log(`Track #${track} has been clicked.`);
+            for (let i = 0; i < 5; i++) {
+              this.players[active].storage[i].available = false;
+            }
+            let availableSlots =
+              this.players[active].storage[track].maxSlots -
+              this.players[active].storage[track].usedSlots;
+            if (this.selectedTile.amount <= availableSlots) {
+              this.players[active].storage[
+                track
+              ].usedSlots += this.selectedTile.amount;
+            } else {
+              this.selectedTile.amount -= availableSlots;
+              this.players[active].storage[track].usedSlots = this.players[
+                active
+              ].storage[track].maxSlots;
+              for (
+                let extraTiles = 0;
+                extraTiles < this.selectedTile.amount;
+                extraTiles++
+              ) {
+                this.players[active].penaltyLine.push(this.selectedTile.color);
+              }
+            }
             this.players[active].storage[
               track
-            ].usedSlots += this.selectedTile.amount;
-          } else {
-            this.selectedTile.amount -= availableSlots;
-            this.players[active].storage[track].usedSlots = this.players[
-              active
-            ].storage[track].maxSlots;
-            for (
-              let extraTiles = 0;
-              extraTiles < this.selectedTile.amount;
-              extraTiles++
-            ) {
-              this.players[active].penaltyLine.push(this.selectedTile.color);
-            }
-          }
-          this.players[active].storage[track].tileID = this.selectedTile.color;
+            ].tileID = this.selectedTile.color;
 
-          for (let tile = 0; tile < 4; tile++) {
-            if (
-              this.factoryTileSelected[this.selectedTile.factory][tile] ===
-              false
-            ) {
-              this.discardYard.push(
-                this.factories[this.selectedTile.factory][tile]
-              );
-            }
+            this.emptyFactory();
+            this.switchPlayer();
           }
-          this.factories[this.selectedTile.factory] = [];
-
-          this.selectedTile.color = 0;
-          this.selectedTile.amount = 0;
-          this.factoryTileSelected[this.selectedTile.factory] = [
-            false,
-            false,
-            false,
-            false
-          ];
-          this.switchPlayer();
         }
       }
     });
   }
+  emptyFactory() {
+    for (let tile = 0; tile < 4; tile++) {
+      if (this.factoryTileSelected[this.selectedTile.factory][tile] === false) {
+        this.discardYard.push(this.factories[this.selectedTile.factory][tile]);
+      }
+    }
+    this.factories[this.selectedTile.factory] = [];
 
+    this.selectedTile.color = 0;
+    this.selectedTile.amount = 0;
+    this.factoryTileSelected[this.selectedTile.factory] = [
+      false,
+      false,
+      false,
+      false
+    ];
+  }
   switchPlayer() {
     if (this.currentPlayer === this.playerCount - 1) {
       this.currentPlayer = 0;
