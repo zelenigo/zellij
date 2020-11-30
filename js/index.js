@@ -17,6 +17,7 @@ class Game {
     }
     this.satchel = [20, 20, 20, 20, 20];
     this.discardYard = [0];
+    this.discardSelected = [0];
     this.lid = [0, 0, 0, 0, 0];
     this.tiles = [];
     this.tiles.push(new Tile(1));
@@ -76,6 +77,10 @@ class Game {
       canvasWidth / 2 - ((50 + 8) * this.discardYard.length) / 2;
     const startingY = 150 + 24;
     for (let tile = 0; tile < this.discardYard.length; tile++) {
+      if (this.discardSelected[tile] === 1) {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(startingX + tile * (50 + 8) - 2, startingY - 2, 54, 54);
+      }
       ctx.drawImage(
         tileImage,
         this.discardYard[tile] * 50,
@@ -206,28 +211,68 @@ class Game {
       if (event.layerY < 334) {
         for (let i = 0; i < this.factoryCount; i++) {
           this.factoryTileSelected[i] = [false, false, false, false];
-          this.selectedTile.color = 0;
-          this.selectedTile.factory = undefined;
-          this.selectedTile.amount = 0;
         }
-      }
-      for (let factory = 0; factory < this.factoryCount; factory++) {
-        for (let i = 0; i < 4; i++) {
-          if (
-            event.layerX > this.factoriesTileCoordinates[factory][i].x &&
-            event.layerX < this.factoriesTileCoordinates[factory][i].dx &&
-            event.layerY > this.factoriesTileCoordinates[factory][i].y &&
-            event.layerY < this.factoriesTileCoordinates[factory][i].dy
-          ) {
-            this.factoryTileSelected[factory][i] = true;
-            this.selectedTile.factory = factory;
-            this.selectedTile.color = this.factories[factory][i];
-            this.selectedTile.amount = 0;
-            if (this.factoryTileSelected[factory][i]) {
-              for (let j = 0; j < 4; j++) {
-                if (this.factories[factory][i] === this.factories[factory][j]) {
-                  this.factoryTileSelected[factory][j] = true;
-                  this.selectedTile.amount++;
+        for (let i = 0; i < this.discardYard.length; i++) {
+          this.discardSelected[i] = 0;
+        }
+        this.selectedTile.color = 0;
+        this.selectedTile.factory = undefined;
+        this.selectedTile.amount = 0;
+        this.selectedTile.firstMarker = false;
+
+        if (event.layerY > 150) {
+          //Check Tiles in Yard
+          const xStartYard =
+            canvasWidth / 2 - ((50 + 8) * this.discardYard.length) / 2;
+          const yStartYard = 150 + 24;
+          for (let tile = 0; tile < this.discardYard.length; tile++) {
+            if (
+              event.layerX > xStartYard + tile * (50 + 8) &&
+              event.layerX < xStartYard + tile * (50 + 8) + 50 &&
+              event.layerY > yStartYard &&
+              event.layerY < yStartYard + 50 &&
+              this.discardYard[tile] !== 0
+            ) {
+              console.log(`Tile #${tile} from the yard has been clicked.`);
+              this.selectedTile.color = this.discardYard[tile];
+              for (let i = 0; i < this.discardYard.length; i++) {
+                if (
+                  this.discardYard[i] === this.selectedTile.color ||
+                  this.discardYard[i] === 0
+                ) {
+                  this.discardSelected[i] = 1;
+                  if (this.discardYard[i] === 0) {
+                    this.selectedTile.firstMarker = true;
+                  } else {
+                    this.selectedTile.amount++;
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          //Check Tiles in Factories
+          for (let factory = 0; factory < this.factoryCount; factory++) {
+            for (let i = 0; i < 4; i++) {
+              if (
+                event.layerX > this.factoriesTileCoordinates[factory][i].x &&
+                event.layerX < this.factoriesTileCoordinates[factory][i].dx &&
+                event.layerY > this.factoriesTileCoordinates[factory][i].y &&
+                event.layerY < this.factoriesTileCoordinates[factory][i].dy
+              ) {
+                this.factoryTileSelected[factory][i] = true;
+                this.selectedTile.factory = factory;
+                this.selectedTile.color = this.factories[factory][i];
+                this.selectedTile.amount = 0;
+                if (this.factoryTileSelected[factory][i]) {
+                  for (let j = 0; j < 4; j++) {
+                    if (
+                      this.factories[factory][i] === this.factories[factory][j]
+                    ) {
+                      this.factoryTileSelected[factory][j] = true;
+                      this.selectedTile.amount++;
+                    }
+                  }
                 }
               }
             }
@@ -299,15 +344,30 @@ class Game {
     });
   }
   emptyFactory() {
-    for (let tile = 0; tile < 4; tile++) {
-      if (this.factoryTileSelected[this.selectedTile.factory][tile] === false) {
-        this.discardYard.push(this.factories[this.selectedTile.factory][tile]);
+    if (this.selectedTile.factory !== undefined) {
+      for (let tile = 0; tile < 4; tile++) {
+        if (
+          this.factoryTileSelected[this.selectedTile.factory][tile] === false
+        ) {
+          this.discardYard.push(
+            this.factories[this.selectedTile.factory][tile]
+          );
+        }
+      }
+      this.factories[this.selectedTile.factory] = [];
+    } else {
+      for (let i = this.discardYard.length; i >= 0; i--) {
+        if (this.discardSelected[i] === 1) {
+          this.discardYard.splice(i, 1);
+          this.discardSelected.splice(i, 1);
+        }
       }
     }
-    this.factories[this.selectedTile.factory] = [];
 
+    this.selectedTile.factory = undefined;
     this.selectedTile.color = 0;
     this.selectedTile.amount = 0;
+    this.selectedTile.firstMarker = false;
     this.factoryTileSelected[this.selectedTile.factory] = [
       false,
       false,
@@ -329,6 +389,7 @@ class Game {
     for (let factory = 0; factory < this.factoryCount; factory++) {
       tiles += this.factories[factory].reduce((a, b) => a + b, 0);
     }
+    tiles += this.discardYard.length;
     if (tiles > 0) {
       return false;
     } else {
