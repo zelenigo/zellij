@@ -4,7 +4,7 @@ class Game {
   constructor(playerCount) {
     //optimized for 2, 3 & 4
     this.playerCount = playerCount;
-    this.firstPlayer = 0;
+    this.firstPlayer = Math.floor(Math.random() * playerCount);
     this.currentPlayer = this.firstPlayer;
     this.factoryCount = playerCount * 2 + 1;
     this.factories = [];
