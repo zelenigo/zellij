@@ -517,9 +517,11 @@ class Game {
         for (let tile = 0; tile < penaltyTiles; tile++) {
           totalPenalty += this.players[player].penaltyValues[tile];
           let penaltyLineTileColor = this.players[player].penaltyLine[tile];
+          console.log(penaltyLineTileColor);
           if (penaltyLineTileColor === 0) {
             this.discardYard = [0];
-            this.firstPlayer === player;
+            this.firstPlayer = player;
+            console.log(this.firstPlayer, player);
           } else {
             this.lid[penaltyLineTileColor - 1]++;
           }
