@@ -23,6 +23,9 @@ class Player {
   constructor(name) {
     this.name = name;
     this.score = 0;
+    this.twoLines = 0;
+    this.midEndside = 0;
+    this.upperEndside = 0;
     this.storage = [];
     for (let i = 0; i < 5; i++) {
       this.storage.push(new Track(i + 1));
