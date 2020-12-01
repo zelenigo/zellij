@@ -11,17 +11,21 @@ const playerBoardImage = new Image();
 playerBoardImage.src = 'images/player-board.png';
 
 const playerDrawCoord = [
-  { x: canvasWidth / 2 - 576 - 64, y: 334 },
-  { x: canvasWidth / 2 + 64, y: 334 },
-  { x: canvasWidth / 2 - 576 - 64, y: 720 },
-  { x: canvasWidth / 2 + 64, y: 720 }
+  { x: canvasWidth / 2 - 576 - 12, y: 334 },
+  { x: canvasWidth / 2 + 12, y: 334 },
+  { x: canvasWidth / 2 - 576 - 12, y: 720 },
+  { x: canvasWidth / 2 + 12, y: 720 }
 ];
 
 // playerBoardImage.addEventListener('load', () => {});
 
 class Player {
-  constructor(name) {
+  constructor(name, id) {
     this.name = name;
+    this.playerImage = new Image();
+    this.playerImage.src = 'images/EvilWizard_Idle_' + id + '.png';
+    this.spriteChangeTime = 0;
+    this.spritePosition = 0;
     this.score = 0;
     this.twoLines = 0;
     this.midEndside = 0;
@@ -124,6 +128,25 @@ class Player {
       ctx.fillStyle = 'orange';
       ctx.fillRect(0, 298, 406, 58);
     }
+  }
+
+  drawAsActive() {
+    const spriteSize = this.playerImage.height;
+    if (Date.now() > this.spriteChangeTime + 200) {
+      this.spritePosition = (this.spritePosition + 1) % 8;
+      this.spriteChangeTime = Date.now();
+    }
+    ctx.drawImage(
+      this.playerImage,
+      spriteSize * this.spritePosition,
+      0,
+      spriteSize,
+      spriteSize,
+      playerBoardImage.width - spriteSize * 1.5,
+      -spriteSize,
+      spriteSize * 2,
+      spriteSize * 2
+    );
   }
 
   checkAvailableTrack(color) {
