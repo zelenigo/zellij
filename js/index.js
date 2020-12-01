@@ -35,6 +35,7 @@ class Game {
     this.roundProgress = 0;
     this.clickX = 0;
     this.clickY = 0;
+    this.endGame = false;
   }
 
   setFactoryTileCoordinates() {
@@ -441,6 +442,23 @@ class Game {
           }
           if (roundScoreRow === 5) {
             roundScoreRow += 2;
+
+            //Checks for endgame conditions
+            if (track < 2) {
+              this.players[player].lowerEndside = 1;
+            } else if (track === 2) {
+              this.players[player].midEndside = 1;
+            } else {
+              this.players[player].upperEndside = 1;
+            }
+            if (
+              this.players[player].lowerEndside +
+                this.players[player].midEndside +
+                this.players[player].upperEndside >
+              0
+            ) {
+              this.endGame = true;
+            }
           }
 
           let roundScoreCol = 0;
@@ -517,6 +535,41 @@ class Game {
     }
   }
 
+  endScreen() {
+    console.log('The game ends');
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.font = '3rem "Carter One"';
+    ctx.fillStyle = 'gainsboro';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Well done!`, canvasWidth / 2, canvasHeight / 4);
+    const playerScores = [];
+    for (let i = 0; i < this.playerCount; i++) {
+      playerScores.push(this.players[i].score);
+    }
+    const winnerScore = Math.max(...playerScores);
+    const winnerIdx = [];
+    for (let i = 0; i < this.playerCount; i++) {
+      if (this.players[i].score === winnerScore) {
+        winnerIdx.push(i);
+      }
+    }
+    ctx.font = '1.5rem "Carter One"';
+    if (winnerIdx.length === 1) {
+      ctx.fillText(
+        `${this.players[winnerIdx].name} won with ${winnerScore} points.`,
+        canvasWidth / 2,
+        canvasHeight / 4 + 50
+      );
+    } else {
+      ctx.fillText(
+        `Both players won with ${winnerScore} points.`,
+        canvasWidth / 2,
+        canvasHeight / 4 + 50
+      );
+    }
+  }
+
   playRound() {
     if (this.roundProgress === 0) {
       this.supplyFactories();
@@ -556,8 +609,12 @@ class Game {
 
     this.playRound();
 
-    window.requestAnimationFrame(() => {
-      this.loop();
-    });
+    if (this.endGame === false) {
+      window.requestAnimationFrame(() => {
+        this.loop();
+      });
+    } else {
+      this.endScreen();
+    }
   }
 }
