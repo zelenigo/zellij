@@ -29,7 +29,7 @@ class Game {
     this.players = [];
     for (let i = 0; i < playerCount; i++) {
       this.players.push(
-        new Player(playerNames[i].value || 'Player ' + (i + 1))
+        new Player(playerNames[i].value || 'Player ' + (i + 1), i + 1)
       );
     }
     this.roundProgress = 0;
@@ -600,7 +600,7 @@ class Game {
         playerDrawCoord[noOfPlayers].y
       );
       if (noOfPlayers === this.currentPlayer) {
-        ctx.fillRect(playerBoardImage.width - 50, 0, 50, 50);
+        this.players[this.currentPlayer].drawAsActive();
         this.players[this.currentPlayer].drawAvailableTrack(
           this.selectedTile.color
         );
