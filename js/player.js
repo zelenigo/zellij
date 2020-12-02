@@ -27,6 +27,8 @@ class Player {
     this.spriteChangeTime = 0;
     this.spritePosition = 0;
     this.score = 0;
+    this.scoreRounds = [];
+    this.penaltyRounds = [];
     this.twoLines = 0;
     this.midEndside = 0;
     this.upperEndside = 0;
@@ -109,6 +111,8 @@ class Player {
   draw() {
     ctx.font = '1.5rem "Carter One"';
     ctx.fillStyle = 'gainsboro';
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'start';
     ctx.fillText(`${this.name}: ${this.score} points`, 4, -24);
     ctx.drawImage(playerBoardImage, 0, 0);
     this.drawPenaltyLine();
@@ -136,6 +140,10 @@ class Player {
       this.spritePosition = (this.spritePosition + 1) % 8;
       this.spriteChangeTime = Date.now();
     }
+    ctx.font = '1rem "Carter One"';
+    ctx.fillStyle = 'gainsboro';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
     ctx.drawImage(
       this.playerImage,
       spriteSize * this.spritePosition,
@@ -143,10 +151,33 @@ class Player {
       spriteSize,
       spriteSize,
       playerBoardImage.width - spriteSize * 1.5,
-      -spriteSize,
+      -spriteSize * 0.85,
       spriteSize * 2,
       spriteSize * 2
     );
+    ctx.fillText(
+      `Your turn!`,
+      playerBoardImage.width - spriteSize * 1.5 + spriteSize,
+      -24
+    );
+  }
+
+  drawScore() {
+    ctx.font = '1rem "Carter One"';
+    ctx.fillStyle = 'gainsboro';
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'start';
+    ctx.fillText(`${this.name}: ${this.score} points`, 0, 0);
+    ctx.fillRect(0, 5, 100, 2);
+    for (let round = 0; round < this.scoreRounds.length; round++) {
+      ctx.fillText(
+        `Round ${round + 1}: ${this.scoreRounds[round]} (${
+          this.penaltyRounds[round]
+        } pen)`,
+        0,
+        35 + round * 22
+      );
+    }
   }
 
   checkAvailableTrack(color) {

@@ -501,6 +501,9 @@ class Game {
           }
           this.players[player].score +=
             roundScoreRow + roundScoreCol + roundScoreAll;
+          this.players[player].scoreRounds.push(
+            roundScoreRow + roundScoreCol + roundScoreAll
+          );
           this.players[player].storage[track].usedSlots = 0;
           this.players[player].storage[track].tileID = 0;
           console.log(
@@ -532,6 +535,7 @@ class Game {
           this.players[player].score = 0;
         } else {
           this.players[player].score -= totalPenalty;
+          this.players[player].penaltyRounds.push(totalPenalty);
         }
       }
     }
@@ -569,6 +573,15 @@ class Game {
         canvasWidth / 2,
         canvasHeight / 4 + 50
       );
+    }
+    for (let player = 0; player < this.playerCount; player++) {
+      ctx.save();
+      ctx.translate(
+        canvasWidth / 2 - 224 + 248 * player,
+        canvasHeight / 4 + 125
+      );
+      this.players[player].drawScore();
+      ctx.restore();
     }
   }
 
