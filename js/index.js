@@ -408,6 +408,7 @@ class Game {
 
   scoring() {
     for (let player = 0; player < this.playerCount; player++) {
+      let roundScore = 0;
       for (let track = 0; track < 5; track++) {
         if (
           this.players[player].storage[track].maxSlots ===
@@ -499,11 +500,9 @@ class Game {
           } else {
             roundScoreAll = 0;
           }
+          roundScore += roundScoreRow + roundScoreCol + roundScoreAll;
           this.players[player].score +=
             roundScoreRow + roundScoreCol + roundScoreAll;
-          this.players[player].scoreRounds.push(
-            roundScoreRow + roundScoreCol + roundScoreAll
-          );
           this.players[player].storage[track].usedSlots = 0;
           this.players[player].storage[track].tileID = 0;
           console.log(
@@ -513,24 +512,23 @@ class Game {
             roundScoreAll
           );
         }
-      } //Calculating penalties
+      }
+      this.players[player].scoreRounds.push(roundScore);
+      //Calculating penalties
       if (this.players[player].penaltyLine.length > 0) {
         let penaltyTiles = this.players[player].penaltyLine.length;
         let totalPenalty = 0;
         for (let tile = 0; tile < penaltyTiles; tile++) {
           totalPenalty += this.players[player].penaltyValues[tile];
           let penaltyLineTileColor = this.players[player].penaltyLine[tile];
-          console.log(penaltyLineTileColor);
           if (penaltyLineTileColor === 0) {
             this.discardYard = [0];
             this.firstPlayer = player;
-            console.log(this.firstPlayer, player);
           } else {
             this.lid[penaltyLineTileColor - 1]++;
           }
         }
         this.players[player].penaltyLine = [];
-        console.log(this.players[player].name, totalPenalty);
         if (totalPenalty > this.players[player].score) {
           this.players[player].score = 0;
         } else {

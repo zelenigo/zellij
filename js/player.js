@@ -29,7 +29,7 @@ class Player {
     this.score = 0;
     this.scoreRounds = [];
     this.penaltyRounds = [];
-    this.twoLines = 0;
+    this.lowerEndside = 0;
     this.midEndside = 0;
     this.upperEndside = 0;
     this.storage = [];
@@ -170,13 +170,21 @@ class Player {
     ctx.fillText(`${this.name}: ${this.score} points`, 0, 0);
     ctx.fillRect(0, 5, 100, 2);
     for (let round = 0; round < this.scoreRounds.length; round++) {
-      ctx.fillText(
-        `Round ${round + 1}: ${this.scoreRounds[round]} (${
-          this.penaltyRounds[round]
-        } pen)`,
-        0,
-        35 + round * 22
-      );
+      if (this.penaltyRounds[round] === undefined) {
+        ctx.fillText(
+          `Round ${round + 1}: ${this.scoreRounds[round]}`,
+          0,
+          35 + round * 22
+        );
+      } else {
+        ctx.fillText(
+          `Round ${round + 1}: ${this.scoreRounds[round]} (${
+            this.penaltyRounds[round]
+          } pen)`,
+          0,
+          35 + round * 22
+        );
+      }
     }
   }
 
