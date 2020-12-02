@@ -1,5 +1,5 @@
 body {
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Carter One', serif;
   color: gainsboro;
   background-color: darkslategray;
   margin: 0;
@@ -10,31 +10,53 @@ body {
   padding: 0 50px;
 }
 
+.interface {
+  width: 1190px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 2em 0;
+  box-shadow: 0 15px 30px -30px black;
+}
+
+.game-title {
+  font-size: 6rem;
+  padding: 0;
+  margin: 0;
+}
+
 .number-of-players {
   list-style: none;
   padding: 0;
   display: flex;
   justify-content: space-between;
-  width: 804px;
 }
 
-.number-of-players button {
-  padding: 0.5em 5.65em;
-  font-family: 'Roboto Slab', serif;
-  font-weight: 600;
-  font-size: 1rem;
+.start-two-players {
+  padding: 0.4em 2em;
+  font-family: 'Carter One', serif;
+  font-size: 2rem;
+  color: darkslategray;
+  background-color: gainsboro;
+  border-radius: 0.25em;
+  border: 0px;
+  transform: skew(-20deg);
+}
+
+.start-two-players span {
+  display: inline-block;
+  transform: skew(20deg);
 }
 
 .player-names {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-between;
-  width: 804px;
-  margin-bottom: 1.5em;
-}
-
-.player-name {
-  padding: 0.5em 0;
+  margin-left: auto;
+  margin-right: 0.25em;
+  transform: skew(-20deg);
 }
 
 .player-name label {
@@ -42,16 +64,25 @@ body {
 }
 
 .player-name-input {
-  padding: 0.25em 0.1em;
-  font-family: 'Roboto Slab', serif;
+  padding: 0.25em 0.5em;
+  margin: 0.25em;
+  font-family: 'Carter One', serif;
   font-size: 1rem;
-  font-weight: 600;
-  width: 385px;
+  color: darkslategray;
+  background-color: gainsboro;
+  border-radius: 0.5em;
+  border: 0px;
+}
+
+.player-name-input::placeholder {
+  transform: skew(20deg);
 }
 
 .game-surface {
+  margin-top: 1rem;
   display: block;
-  /*  width: 100%;
-  min-width: 600px;
-  max-width: 1280px; */
+}
+
+.attribution {
+  color: slategray;
 }
