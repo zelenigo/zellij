@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Carter+One&family=Roboto+Slab:wght@300;600;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
@@ -13,34 +13,30 @@
     <title>Zellij</title>
   </head>
   <body>
-    <h1>Zellij</h1>
-    <ul class="number-of-players">
-      <li><button class="start-two-players">2 Players</button></li>
-      <li><button class="start-three-players">3 Players</button></li>
-      <li><button class="start-four-players">4 Players</button></li>
-    </ul>
-    <section class="player-names">
-      <div class="player-name">
-        <label for="nameone">Player 1:</label>
-        <input
-          class="player-name-input"
-          type="text"
-          id="nameone"
-          name="player_name"
-          placeholder="Player 1"
-        />
-      </div>
-      <div class="player-name">
-        <label for="nametwo">Player 2:</label>
-        <input
-          class="player-name-input"
-          type="text"
-          id="nametwo"
-          name="player_name"
-          placeholder="Player 2"
-        />
-      </div>
-      <div class="player-name">
+    <section class="interface">
+      <h1 class="game-title">Zellij</h1>
+      <section class="player-names">
+        <div class="player-name">
+          <label for="nameone">Player 1:</label>
+          <input
+            class="player-name-input"
+            type="text"
+            id="nameone"
+            name="player_name"
+            placeholder="Player 1"
+          />
+        </div>
+        <div class="player-name">
+          <label for="nametwo">Player 2:</label>
+          <input
+            class="player-name-input"
+            type="text"
+            id="nametwo"
+            name="player_name"
+            placeholder="Player 2"
+          />
+        </div>
+        <!--<div class="player-name">
         <label for="namethree">Player 3:</label>
         <input
           class="player-name-input"
@@ -59,9 +55,18 @@
           name="player_name"
           placeholder="Player 4"
         />
-      </div>
+      </div>-->
+      </section>
+      <ul class="number-of-players">
+        <li>
+          <button class="start-two-players"><span>New Game</span></button>
+        </li>
+        <!--<li><button class="start-three-players">3 Players</button></li>
+      <li><button class="start-four-players">4 Players</button></li>-->
+      </ul>
     </section>
     <canvas class="game-surface" width="1280" height="720"></canvas>
+    <footer><copy class="attribution">copyright</copy></footer>
 
     <script type="text/javascript" src="js/tiles.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
