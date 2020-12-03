@@ -13,11 +13,12 @@
     <title>Zellij</title>
   </head>
   <body>
-    <section class="interface">
+    <header class="interface">
       <h1 class="game-title">Zellij</h1>
-      <section class="player-names">
+
+      <form id="create-new-game" class="player-info">
         <div class="player-name">
-          <label for="nameone">Player 1:</label>
+          <label class="sr-only" for="nameone">Player 1:</label>
           <input
             class="player-name-input"
             type="text"
@@ -27,7 +28,7 @@
           />
         </div>
         <div class="player-name">
-          <label for="nametwo">Player 2:</label>
+          <label class="sr-only" for="nametwo">Player 2:</label>
           <input
             class="player-name-input"
             type="text"
@@ -36,37 +37,15 @@
             placeholder="Player 2"
           />
         </div>
-        <!--<div class="player-name">
-        <label for="namethree">Player 3:</label>
-        <input
-          class="player-name-input"
-          type="text"
-          id="namethree"
-          name="player_name"
-          placeholder="Player 3"
-        />
-      </div>
-      <div class="player-name">
-        <label for="namefour">Player 4:</label>
-        <input
-          class="player-name-input"
-          type="text"
-          id="namefour"
-          name="player_name"
-          placeholder="Player 4"
-        />
-      </div>-->
-      </section>
-      <ul class="number-of-players">
-        <li>
-          <button class="start-two-players"><span>New Game</span></button>
-        </li>
-        <!--<li><button class="start-three-players">3 Players</button></li>
-      <li><button class="start-four-players">4 Players</button></li>-->
-      </ul>
-    </section>
+        <button class="start-two-players" type="submit">
+          <span>New Game</span>
+        </button>
+      </form>
+    </header>
+
     <canvas class="game-surface" width="1280" height="720"></canvas>
-    <footer><copy class="attribution">copyright</copy></footer>
+
+    <footer><small class="attribution">copyright</small></footer>
 
     <script type="text/javascript" src="js/tiles.js"></script>
     <script type="text/javascript" src="js/index.js"></script>

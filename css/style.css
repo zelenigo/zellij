@@ -26,55 +26,59 @@ body {
   margin: 0;
 }
 
-.number-of-players {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  justify-content: space-between;
+.player-info {
+  display: grid;
+  gap: 0.5em;
+  margin-left: auto;
+  margin-right: 0.25em;
+  transform: skew(-20deg);
+}
+
+.player-name {
+  background-color: gainsboro;
+  border-radius: 0.5em;
+  border: 0px;
+  padding: 0.2em 0.25em;
+}
+
+.player-name:first-child {
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 1;
+}
+
+.player-name:last-child {
+  grid-column: 1 / span 1;
+  grid-row: 2 / span 1;
+}
+
+.player-name-input {
+  font-family: 'Carter One', serif;
+  font-size: 1rem;
+  color: darkslategray;
+  background-color: transparent;
+  transform: skew(20deg);
+  border: 0;
+  margin: 0 0.25em;
+}
+
+.player-name-input:active {
+  border: 0;
 }
 
 .start-two-players {
-  padding: 0.4em 2em;
+  padding: 0.3em 2em;
   font-family: 'Carter One', serif;
   font-size: 2rem;
   color: darkslategray;
   background-color: gainsboro;
   border-radius: 0.25em;
   border: 0px;
-  transform: skew(-20deg);
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 2;
 }
 
 .start-two-players span {
   display: inline-block;
-  transform: skew(20deg);
-}
-
-.player-names {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: auto;
-  margin-right: 0.25em;
-  transform: skew(-20deg);
-}
-
-.player-name label {
-  display: none;
-}
-
-.player-name-input {
-  padding: 0.25em 0.5em;
-  margin: 0.25em;
-  font-family: 'Carter One', serif;
-  font-size: 1rem;
-  color: darkslategray;
-  background-color: gainsboro;
-  border-radius: 0.5em;
-  border: 0px;
-}
-
-.player-name-input::placeholder {
   transform: skew(20deg);
 }
 
@@ -85,4 +89,15 @@ body {
 
 .attribution {
   color: slategray;
+}
+
+.sr-only {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
 }
