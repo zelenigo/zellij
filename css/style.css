@@ -89,6 +89,17 @@ body {
 
 .attribution {
   color: slategray;
+  text-align: center;
+  font-size: 0.7rem;
+}
+
+.attribution p {
+  margin: 0;
+  padding: 0;
+}
+
+.attribution a {
+  color: darkgray;
 }
 
 .sr-only {
