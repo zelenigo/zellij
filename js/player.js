@@ -24,6 +24,8 @@ class Player {
     this.name = name;
     this.playerImage = new Image();
     this.playerImage.src = 'images/Chara_Idle.png';
+    this.speechBubble = new Image();
+    this.speechBubble.src = 'images/speech-bubble.png';
     this.spriteChangeTime = 0;
     this.spritePosition = 0;
     this.score = 0;
@@ -155,7 +157,19 @@ class Player {
       spriteSize * 0.5,
       spriteSize * 0.5
     );
-    ctx.fillText(`Your turn!`, playerBoardImage.width - spriteSize / 6.5, -24);
+    ctx.drawImage(
+      this.speechBubble,
+      0,
+      0,
+      104,
+      104,
+      playerBoardImage.width - spriteSize / 6.5,
+      -50,
+      72,
+      72
+    );
+    ctx.fillText(`Your`, playerBoardImage.width - 44, -28);
+    ctx.fillText(`turn!`, playerBoardImage.width - 44, -14);
   }
 
   drawScore() {
