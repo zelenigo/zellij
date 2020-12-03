@@ -23,7 +23,7 @@ class Player {
   constructor(name, id) {
     this.name = name;
     this.playerImage = new Image();
-    this.playerImage.src = 'images/EvilWizard_Idle_' + id + '.png';
+    this.playerImage.src = 'images/Chara_Idle.png';
     this.spriteChangeTime = 0;
     this.spritePosition = 0;
     this.score = 0;
@@ -135,9 +135,9 @@ class Player {
   }
 
   drawAsActive() {
-    const spriteSize = this.playerImage.height;
-    if (Date.now() > this.spriteChangeTime + 200) {
-      this.spritePosition = (this.spritePosition + 1) % 8;
+    const spriteSize = this.playerImage.height / 4;
+    if (Date.now() > this.spriteChangeTime + 100) {
+      this.spritePosition = (this.spritePosition + 1) % 16;
       this.spriteChangeTime = Date.now();
     }
     ctx.font = '1rem "Carter One"';
@@ -146,20 +146,16 @@ class Player {
     ctx.textAlign = 'center';
     ctx.drawImage(
       this.playerImage,
-      spriteSize * this.spritePosition,
-      0,
+      spriteSize * (this.spritePosition % 4),
+      spriteSize * ((this.spritePosition / 4) | 0),
       spriteSize,
       spriteSize,
-      playerBoardImage.width - spriteSize * 1.5,
-      -spriteSize * 0.85,
-      spriteSize * 2,
-      spriteSize * 2
+      playerBoardImage.width - spriteSize / 2.5,
+      -100,
+      spriteSize * 0.5,
+      spriteSize * 0.5
     );
-    ctx.fillText(
-      `Your turn!`,
-      playerBoardImage.width - spriteSize * 1.5 + spriteSize,
-      -24
-    );
+    ctx.fillText(`Your turn!`, playerBoardImage.width - spriteSize / 6.5, -24);
   }
 
   drawScore() {
