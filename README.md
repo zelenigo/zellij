@@ -38,3 +38,8 @@ Zellij is a digital board game for two players, based on Azul.
 
 1. The game ends once a player fills a row and the scoring for that round ends.
 1. Highest score wins — in case of a tie, a rematch is in order.
+
+## 2. Credits
+
+- Original Gameplay: [Azul](https://planbgames.com/games/azul-next-move-games-michael-kiesling-strategy-abstract-board-game-winner-spiel-des-jahres-game-of-the-year-cannes-portuguese-tiles-royal-palace-of-evora-1) by Michael Kiesling / Next Move Games
+- The current player marker — Blue Magician by [maaot](https://maaot.itch.io/mossy-cavern) at itch.io.
