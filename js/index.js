@@ -619,6 +619,7 @@ class Game {
       this.players[noOfPlayers].draw();
       ctx.restore();
     }
+    drawHelp();
 
     this.playRound();
 
