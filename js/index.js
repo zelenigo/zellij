@@ -601,25 +601,27 @@ class Game {
   }
 
   loop() {
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    this.drawFactories();
-    this.drawYard();
-    for (let noOfPlayers = 0; noOfPlayers < this.playerCount; noOfPlayers++) {
-      ctx.save();
-      ctx.translate(
-        playerDrawCoord[noOfPlayers].x,
-        playerDrawCoord[noOfPlayers].y
-      );
-      if (noOfPlayers === this.currentPlayer) {
-        this.players[this.currentPlayer].drawAsActive();
-        this.players[this.currentPlayer].drawAvailableTrack(
-          this.selectedTile.color
+    if (this.endGame === false) {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      this.drawFactories();
+      this.drawYard();
+      for (let noOfPlayers = 0; noOfPlayers < this.playerCount; noOfPlayers++) {
+        ctx.save();
+        ctx.translate(
+          playerDrawCoord[noOfPlayers].x,
+          playerDrawCoord[noOfPlayers].y
         );
+        if (noOfPlayers === this.currentPlayer) {
+          this.players[this.currentPlayer].drawAsActive();
+          this.players[this.currentPlayer].drawAvailableTrack(
+            this.selectedTile.color
+          );
+        }
+        this.players[noOfPlayers].draw();
+        ctx.restore();
       }
-      this.players[noOfPlayers].draw();
-      ctx.restore();
+      drawHelp();
     }
-    drawHelp();
 
     this.playRound();
 
