@@ -3,6 +3,7 @@
 1st Ironhack Project — a game
 
 Deployed version: https://zellij.netlify.app/
+[Presentation](https://docs.google.com/presentation/d/1ZFhB8KOBH06fW0RV_sXBYAB9PQxMDf6bfituXrEkNIk/edit?usp=sharing)
 
 ## 1. Rules
 
