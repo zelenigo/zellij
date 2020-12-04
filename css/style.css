@@ -133,6 +133,11 @@ body {
   bottom: 5px;
   background: transparent;
   border: 0;
+  display: none;
+}
+
+.help.active-btn {
+  display: block;
 }
 
 .sr-only {

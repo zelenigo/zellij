@@ -13,6 +13,7 @@ const playerNames = [
 ];
 
 let game;
+//Intro text
 ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 ctx.font = '3rem "Carter One"';
 ctx.fillStyle = 'gainsboro';
@@ -38,9 +39,12 @@ ctx.fillText(
   canvasWidth / 2,
   canvasHeight / 4 + 300
 );
+
+//Start game
 const startTwoBtn = document.getElementById('create-new-game');
 startTwoBtn.addEventListener('submit', (event) => {
   game = new Game(2);
+  helpBtn.classList.add('active-btn');
   game.setFactoryTileCoordinates();
   game.loop();
   event.preventDefault();
