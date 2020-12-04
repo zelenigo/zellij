@@ -1,25 +1,33 @@
-body {
+* {
   box-sizing: border-box;
+}
+
+body {
   font-family: 'Carter One', serif;
   color: gainsboro;
   background-color: darkslategray;
   margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 10px 50px;
   min-height: 100vh;
 }
 
 .interface {
-  width: 1190px;
+  width: 100%;
+  max-width: 1280px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  margin: 0 0 2em 0;
-  box-shadow: 0 15px 30px -30px black;
+  flex-direction: column;
+  margin: 0 auto 2em auto;
+}
+
+@media (min-width: 900px) {
+  .interface {
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0 15px 30px -30px black;
+  }
 }
 
 .game-title {
@@ -31,9 +39,14 @@ body {
 .player-info {
   display: grid;
   gap: 0.5em;
-  margin-left: auto;
-  margin-right: 0.25em;
   transform: skew(-20deg);
+}
+
+@media (min-width: 900px) {
+  .player-info {
+    margin-left: auto;
+    margin-right: 0.25em;
+  }
 }
 
 .player-name {
@@ -86,6 +99,8 @@ body {
 
 .game-wrapper {
   position: relative;
+  outline: 1px solid slategray;
+  margin: 0 auto;
 }
 
 .game-surface {
