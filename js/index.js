@@ -540,7 +540,6 @@ class Game {
   }
 
   endScreen() {
-    console.log('The game ends');
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.font = '3rem "Carter One"';
     ctx.fillStyle = 'gainsboro';
@@ -621,16 +620,13 @@ class Game {
         ctx.restore();
       }
       drawHelp();
-    }
 
-    this.playRound();
-
-    if (this.endGame === false) {
-      window.requestAnimationFrame(() => {
-        this.loop();
-      });
+      this.playRound();
     } else {
       this.endScreen();
     }
+    window.requestAnimationFrame(() => {
+      this.loop();
+    });
   }
 }
