@@ -1,4 +1,5 @@
 body {
+  box-sizing: border-box;
   font-family: 'Carter One', serif;
   color: gainsboro;
   background-color: darkslategray;
@@ -7,7 +8,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 50px;
+  padding: 10px 50px;
+  min-height: 100vh;
 }
 
 .interface {
@@ -82,9 +84,17 @@ body {
   transform: skew(20deg);
 }
 
+.game-wrapper {
+  position: relative;
+}
+
 .game-surface {
   margin-top: 1rem;
   display: block;
+}
+
+.footer {
+  margin-top: auto;
 }
 
 .attribution {
