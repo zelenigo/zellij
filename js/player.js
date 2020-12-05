@@ -180,7 +180,7 @@ class Player {
     ctx.fillText(`${this.name}: ${this.score} points`, 0, 0);
     ctx.fillRect(0, 5, 100, 2);
     for (let round = 0; round < this.scoreRounds.length; round++) {
-      if (this.penaltyRounds[round] === undefined) {
+      if (this.penaltyRounds[round] === 0) {
         ctx.fillText(
           `Round ${round + 1}: ${this.scoreRounds[round]}`,
           0,
