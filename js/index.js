@@ -528,12 +528,12 @@ class Game {
             this.lid[penaltyLineTileColor - 1]++;
           }
         }
+        this.players[player].penaltyRounds.push(totalPenalty);
         this.players[player].penaltyLine = [];
         if (totalPenalty > this.players[player].score) {
           this.players[player].score = 0;
         } else {
           this.players[player].score -= totalPenalty;
-          this.players[player].penaltyRounds.push(totalPenalty);
         }
       }
     }
