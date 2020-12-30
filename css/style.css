@@ -1,0 +1,153 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Carter One', serif;
+  color: gainsboro;
+  background-color: darkslategray;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 50px;
+  min-height: 100vh;
+}
+
+.interface {
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto 2em auto;
+}
+
+@media (min-width: 900px) {
+  .interface {
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0 15px 30px -30px black;
+  }
+}
+
+.game-title {
+  font-size: 6rem;
+  padding: 0;
+  margin: 0;
+}
+
+.player-info {
+  display: grid;
+  gap: 0.5em;
+  transform: skew(-20deg);
+}
+
+@media (min-width: 900px) {
+  .player-info {
+    margin-left: auto;
+    margin-right: 0.25em;
+  }
+}
+
+.player-name {
+  background-color: gainsboro;
+  border-radius: 0.5em;
+  border: 0px;
+  padding: 0.2em 0.25em;
+}
+
+.player-name:first-child {
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 1;
+}
+
+.player-name:last-child {
+  grid-column: 1 / span 1;
+  grid-row: 2 / span 1;
+}
+
+.player-name-input {
+  font-family: 'Carter One', serif;
+  font-size: 1rem;
+  color: darkslategray;
+  background-color: transparent;
+  transform: skew(20deg);
+  border: 0;
+  margin: 0 0.25em;
+}
+
+.player-name-input:active {
+  border: 0;
+}
+
+.start-two-players {
+  padding: 0.3em 2em;
+  font-family: 'Carter One', serif;
+  font-size: 2rem;
+  color: darkslategray;
+  background-color: gainsboro;
+  border-radius: 0.25em;
+  border: 0px;
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 2;
+}
+
+.start-two-players span {
+  display: inline-block;
+  transform: skew(20deg);
+}
+
+.game-wrapper {
+  position: relative;
+  outline: 1px solid slategray;
+  margin: 0 auto;
+}
+
+.game-surface {
+  margin-top: 1rem;
+  display: block;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 1em;
+}
+
+.attribution {
+  color: slategray;
+  text-align: center;
+  font-size: 0.7rem;
+}
+
+.attribution p {
+  margin: 0;
+  padding: 0;
+}
+
+.attribution a {
+  color: darkgray;
+}
+
+.help {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  background: transparent;
+  border: 0;
+  display: none;
+}
+
+.help.active-btn {
+  display: block;
+}
+
+.sr-only {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
